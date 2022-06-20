@@ -1,8 +1,8 @@
+import { genSalt, hash } from 'bcrypt';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { hash, genSalt } from 'bcrypt';
 import { roles } from '../app/core/auth/model/roles.enum';
 
-export class InsertData1572480830290 implements MigrationInterface {
+export class InsertData1655746735942 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(
       `INSERT INTO EMPLOYEE(id, name, surname, email) VALUES(1, 'Santiago', 'Fowler', 'Santiago.Fowler@example.com');`,
@@ -24,12 +24,6 @@ export class InsertData1572480830290 implements MigrationInterface {
     ]);
     await queryRunner.query(`INSERT INTO USER(id, username, password, role) VALUES(?, ?, ?, ?);`, [
       2,
-      'waiter',
-      await hash('waiter', await genSalt(12)),
-      roles.USER,
-    ]);
-    await queryRunner.query(`INSERT INTO USER(id, username, password, role) VALUES(?, ?, ?, ?);`, [
-      3,
       'admin',
       await hash('admin', await genSalt(12)),
       roles.ADMIN,

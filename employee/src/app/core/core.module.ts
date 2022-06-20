@@ -1,8 +1,6 @@
-import { Global, Module } from '@nestjs/common';
-import { ClassSerializerInterceptor } from '@devon4node/common/serializer';
-import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
+import { ClassSerializerInterceptor, Global, Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WinstonLogger } from '../shared/logger/winston.logger';
-import { BusinessLogicFilter } from '../shared/filters/business-logic.filter';
 import { ConfigModule, ConfigService } from '@devon4node/config';
 import { Config } from '../shared/model/config/config.model';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -21,17 +19,12 @@ import { UserModule } from './user/user.module';
       },
       inject: [ConfigService],
     }),
-    ConfigModule.forRoot({
-      configPrefix: 'devon4node',
+    ConfigModule.register({
       configType: Config,
     }),
   ],
   controllers: [],
-  providers: [
-    { provide: APP_FILTER, useClass: BusinessLogicFilter },
-    { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
-    WinstonLogger,
-  ],
+  providers: [{ provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, WinstonLogger],
   exports: [UserModule, AuthModule, ConfigModule, WinstonLogger],
 })
 export class CoreModule {}
